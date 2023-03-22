@@ -1,5 +1,5 @@
 import os
-import sys
+import datetime
 import json
 import hashlib
 import time
@@ -33,15 +33,21 @@ def load_baseline(file_path):
 def detect_changes(file_path, baseline_data):
     current_file_info = get_file_info(file_path)
 
-    for file_info in baseline_data:
-        if file_info["path"] == current_file_info["path"]:
-            if file_info["hash"] != current_file_info["hash"]:
-                print(f"File content changed: {file_path}")
-            if file_info["permissions"] != current_file_info["permissions"]:
-                print(f"File permissions changed: {file_path}")
-            return
+    date = datetime.now().strftime("%H:%M:%S")
 
-    print(f"New file detected: {file_path}")
+    with open(f'sys_log_{date}', 'w') as f:
+        for file_info in baseline_data:
+            if file_info["path"] == current_file_info["path"]:
+                if file_info["hash"] != current_file_info["hash"]:
+                    print(f"File content changed: {file_path}")
+                    f.write(f"File content changed: {file_path}")
+                if file_info["permissions"] != current_file_info["permissions"]:
+                    print(f"File permissions changed: {file_path}")
+                    f.write(f"File permissions changed: {file_path}")
+                return
+
+        print(f"New file detected: {file_path}")
+        f.write(f"New file detected: {file_path}")
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, baseline_data):
@@ -78,8 +84,8 @@ def monitor_directory(directory, baseline_data):
 if __name__ == "__main__":
     
     while True:
-        directory = input("Enter a file path to monitor or type 'exit' to quit: ")
-        if directory.lower() == 'exit':
+        directory = input("Enter a file path to monitor or type 'q' to quit: ")
+        if directory.lower() == 'q':
             break
         if os.path.exists(directory):
             baseline_file = "baseline_data.json"
