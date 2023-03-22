@@ -1,0 +1,14 @@
+[
+  {
+    "path": "baseline_data.json",
+    "hash": "4fdcf33f0c9be5622952dfdfe9361134e083a2aeed9fc69ddce97a4c8084e28b",
+    "size": 164,
+    "permissions": "666"
+  },
+  {
+    "path": "main.py",
+    "hash": "7c4177f64f82c262032bd3025bcd8c932a218df4b41e83cd522e0a1befcdfd0b",
+    "size": 1128,
+    "permissions": "666"
+  }
+]
