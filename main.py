@@ -47,20 +47,19 @@ def detect_changes(file_path, baseline_data, del_flag):
                 if file_info["path"] == current_file_info["path"]:
                     if file_info["hash"] != current_file_info["hash"]:
                         f.write(f"{date} File content changed: {file_path}\n")
-                        file_info["hash"] = current_file_info["hash"]  # Update hash in baseline_data
+                        file_info["hash"] = current_file_info["hash"]
                         break
                     if file_info["permissions"] != current_file_info["permissions"]:
                         f.write(f"{date} File permissions changed: {file_path}\n")
-                        file_info["permissions"] = current_file_info["permissions"]  # Update permissions in baseline_data
+                        file_info["permissions"] = current_file_info["permissions"]
                         break
                     return
 
             else:
                 f.write(f"{date} New file detected: {file_path}\n")
-                baseline_data.append(current_file_info)  # Add new file info to baseline_data
+                baseline_data.append(current_file_info)
 
-            save_baseline(baseline_file, baseline_data)  # Save the updated baseline_data to JSON file
-            
+            save_baseline(baseline_file, baseline_data)
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, baseline_data):
         self.baseline_data = baseline_data
