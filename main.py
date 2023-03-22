@@ -30,6 +30,10 @@ def load_baseline(file_path):
     with open(file_path, "r") as f:
         return json.load(f)
 
+def save_baseline(file_path, baseline_data):
+    with open(file_path, "w") as f:
+        json.dump(baseline_data, f, indent=2)
+
 def detect_changes(file_path, baseline_data, del_flag):
     current_file_info = get_file_info(file_path)
     day = datetime.now().strftime("%F")
@@ -37,19 +41,26 @@ def detect_changes(file_path, baseline_data, del_flag):
     print(f"Change detected check log! sys_log_{day}")
     with open(f'sys_log_{day}', 'a') as f:
         if del_flag:
-            f.write(f"{date} File deleted: {file_path}")
-        for file_info in baseline_data:
-            if file_info["path"] == current_file_info["path"]:
-                if file_info["hash"] != current_file_info["hash"]:
-                    f.write(f"{date} File content changed: {file_path}\n")
-                    break
-                if file_info["permissions"] != current_file_info["permissions"]:
-                    f.write(f"{date} File permissions changed: {file_path}\n")
-                    break
-                return
+            f.write(f"{date} File deleted: {file_path}\n")
+        else:
+            for file_info in baseline_data:
+                if file_info["path"] == current_file_info["path"]:
+                    if file_info["hash"] != current_file_info["hash"]:
+                        f.write(f"{date} File content changed: {file_path}\n")
+                        file_info["hash"] = current_file_info["hash"]  # Update hash in baseline_data
+                        break
+                    if file_info["permissions"] != current_file_info["permissions"]:
+                        f.write(f"{date} File permissions changed: {file_path}\n")
+                        file_info["permissions"] = current_file_info["permissions"]  # Update permissions in baseline_data
+                        break
+                    return
 
-        f.write(f"{date} New file detected: {file_path}\n")
+            else:
+                f.write(f"{date} New file detected: {file_path}\n")
+                baseline_data.append(current_file_info)  # Add new file info to baseline_data
 
+            save_baseline(baseline_file, baseline_data)  # Save the updated baseline_data to JSON file
+            
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, baseline_data):
         self.baseline_data = baseline_data
@@ -57,12 +68,12 @@ class FileChangeHandler(FileSystemEventHandler):
     def on_modified(self, event):
         if not event.is_directory:
             print(f"File modified: {event.src_path}")
-            detect_changes(event.src_path, self.baseline_data)
+            detect_changes(event.src_path, self.baseline_data, del_flag = False)
 
     def on_created(self, event):
         if not event.is_directory:
             print(f"File created: {event.src_path}")
-            detect_changes(event.src_path, self.baseline_data)
+            detect_changes(event.src_path, self.baseline_data, del_flag = False)
 
     def on_deleted(self, event):
         if not event.is_directory:
