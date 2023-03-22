@@ -1,5 +1,5 @@
 import os
-import datetime
+from datetime import datetime
 import json
 import hashlib
 import time
@@ -30,24 +30,25 @@ def load_baseline(file_path):
     with open(file_path, "r") as f:
         return json.load(f)
 
-def detect_changes(file_path, baseline_data):
+def detect_changes(file_path, baseline_data, del_flag):
     current_file_info = get_file_info(file_path)
-
-    date = datetime.now().strftime("%H:%M:%S")
-
-    with open(f'sys_log_{date}', 'w') as f:
+    day = datetime.now().strftime("%F")
+    date = datetime.now().strftime("%Y-%m-%d_%H:%M:%S.%f")
+    print(f"Change detected check log! sys_log_{day}")
+    with open(f'sys_log_{day}', 'a') as f:
+        if del_flag:
+            f.write(f"{date} File deleted: {file_path}")
         for file_info in baseline_data:
             if file_info["path"] == current_file_info["path"]:
                 if file_info["hash"] != current_file_info["hash"]:
-                    print(f"File content changed: {file_path}")
-                    f.write(f"File content changed: {file_path}")
+                    f.write(f"{date} File content changed: {file_path}\n")
+                    break
                 if file_info["permissions"] != current_file_info["permissions"]:
-                    print(f"File permissions changed: {file_path}")
-                    f.write(f"File permissions changed: {file_path}")
+                    f.write(f"{date} File permissions changed: {file_path}\n")
+                    break
                 return
 
-        print(f"New file detected: {file_path}")
-        f.write(f"New file detected: {file_path}")
+        f.write(f"{date} New file detected: {file_path}\n")
 
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, baseline_data):
@@ -66,6 +67,8 @@ class FileChangeHandler(FileSystemEventHandler):
     def on_deleted(self, event):
         if not event.is_directory:
             print(f"File deleted: {event.src_path}")
+            detect_changes(event.src_path, self.baseline_data, del_flag = True)
+            
 
 def monitor_directory(directory, baseline_data):
     event_handler = FileChangeHandler(baseline_data)
