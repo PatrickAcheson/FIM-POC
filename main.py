@@ -14,7 +14,7 @@ def generate_file_hash(file_path):
     # read the file in blocks of 4096 bytes and update the hash object
     with open(file_path, "rb") as f:
         for byte_block in iter(lambda: f.read(4096), b""):
-            # code credit; https://stackoverflow.com/questions/31632168/does-for-line-in-file-work-with-binary-files-in-python
+            # credit; https://stackoverflow.com/questions/31632168/does-for-line-in-file-work-with-binary-files-in-python
             sha256_hash.update(byte_block)
 
     # Return the hex digest of the hash object as a string

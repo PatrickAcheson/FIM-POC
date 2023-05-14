@@ -26,6 +26,6 @@ To use the script, follow these steps:
 1. Clone the repository to your local machine.
 2. Navigate to the directory containing the script.
 3. Run the script with the command `python main.py`.
-4. When prompted, enter the path of the directory you want to monitor.
+4. When prompted, enter the path of the directory you want to monitor (do not select current directory or expect recursion like behavior )
 5. The script will begin monitoring the directory and logging any changes to the system log file.
 6. To stop monitoring, press `CTRL + C`.

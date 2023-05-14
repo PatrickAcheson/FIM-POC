@@ -16,5 +16,29 @@
     "hash": "055fe98d0e8ef2669b021a310bc46fed588bee0dbf57e1b3c13d39aa570e87a9",
     "size": 0,
     "permissions": "666"
+  },
+  {
+    "path": "./dsdas",
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "permissions": "666"
+  },
+  {
+    "path": "./sys_log_2023-05-14",
+    "hash": "739313ef63b70f4ebb5af5d3137c9e97e8c10e60ee9a89045d16f27504e57d5f",
+    "size": 55,
+    "permissions": "666"
+  },
+  {
+    "path": "./baseline_data.json",
+    "hash": "002200c32a4de4e40fdc1caff989af72f0cca11260b9846a7213353c92e27873",
+    "size": 833,
+    "permissions": "666"
+  },
+  {
+    "path": "testing\\hello",
+    "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "size": 0,
+    "permissions": "666"
   }
 ]
