@@ -4,5 +4,11 @@
     "hash": "4fdcf33f0c9be5622952dfdfe9361134e083a2aeed9fc69ddce97a4c8084e28b",
     "size": 164,
     "permissions": "666"
+  },
+  {
+    "path": "testing\\sdsdsd",
+    "hash": "158c222e9b2ba8408c74df45f82620b2f672b34ef4c5c3719fced23e73077e56",
+    "size": 8,
+    "permissions": "666"
   }
 ]
