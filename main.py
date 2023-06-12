@@ -36,10 +36,9 @@ def log_change(date, change_type, file_path):
     with open(f'sys_log_{date}', 'a') as f:
         f.write(
             f"{datetime.now().strftime('%Y-%m-%d_%H:%M:%S.%f')} {change_type} {file_path}\n")
+            
 
 # Function to detect changes to a file and log them
-
-
 def detect_changes(file_path, baseline_data, change_type):
     current_file_info = get_file_info(file_path)
     day = datetime.now().strftime("%F")
@@ -59,8 +58,6 @@ def detect_changes(file_path, baseline_data, change_type):
 
 # Class to handle file system events
 # https://pythonhosted.org/watchdog/api.html#event-classes
-
-
 class FileChangeHandler(FileSystemEventHandler):
     def __init__(self, baseline_data):
         self.baseline_data = baseline_data
@@ -91,7 +88,7 @@ def monitor_directory(directory, baseline_data):
     observer.join()
 
 
-# Main function
+# for cli execution of main
 if __name__ == "__main__":
     while True:
         directory = input("Enter a file path to monitor or type 'q' to quit: ")
